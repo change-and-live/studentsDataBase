@@ -55,6 +55,10 @@ void findStudentsMinGPA(const std::vector<Student>& database) {
 
 // Функция для поиска студента с наибольшим баллом
 void findStudentsMaxGPA(const std::vector<Student>& database) {
+    if (database.empty()){
+        std::cout << "База данных пуста";
+        return;
+    }
     double max_gpa = 0.0;
     std::string student_name = "";
     for (const Student& student : database) {
