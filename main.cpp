@@ -37,7 +37,7 @@ void displayStudents(const std::vector<Student>& database) {
 }
 
 // Функция для поиска студента с наименьшим баллом
-void findStudentsMaxGPA(const std::vector<Student>& database) {
+void findStudentsMinGPA(const std::vector<Student>& database) {
     double min_gpa = 100.0;
     std::string student_name = "";
     for (const Student& student : database) {
@@ -49,6 +49,19 @@ void findStudentsMaxGPA(const std::vector<Student>& database) {
     std::cout << "Студент с наименьшим баллом: " << student_name << "\t балл = " << min_gpa << "\n";
 }
 
+// Функция для поиска студента с наибольшим баллом
+void findStudentsMaxGPA(const std::vector<Student>& database) {
+    double max_gpa = 0.0;
+    std::string student_name = "";
+    for (const Student& student : database) {
+        if (max_gpa < student.gpa) {
+            max_gpa = student.gpa;
+            student_name = student.name;
+        }
+    }
+    std::cout << "Студент с наибольшим баллом: " << student_name << "\t балл = " << max_gpa << "\n";
+}
+
 int main() {
     std::vector<Student> database;
 
@@ -58,6 +71,7 @@ int main() {
         std::cout << "1. Добавить студента\n";
         std::cout << "2. Вывести список студентов\n";
         std::cout << "3. Вывести студента с наименьшим баллом\n";
+        std::cout << "3. Вывести студента с наибольшим баллом\n";
         std::cout << "0. Выход\n";
         std::cout << "Выберите действие: ";
         std::cin >> choice;
@@ -68,6 +82,12 @@ int main() {
                 break;
             case 2:
                 displayStudents(database);
+                break;
+            case 3:
+                findStudentsMinGPA(database);
+                break;
+            case 4:
+                findStudentsMaxGPA(database);
                 break;
             case 0:
                 std::cout << "Выход из программы.\n";
