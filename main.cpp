@@ -36,6 +36,19 @@ void displayStudents(const std::vector<Student>& database) {
     }
 }
 
+// Функция для поиска студента с наименьшим баллом
+void findStudentsMaxGPA(const std::vector<Student>& database) {
+    double min_gpa = 100.0;
+    std::string student_name = "";
+    for (const Student& student : database) {
+        if (min_gpa > student.gpa) {
+            min_gpa = student.gpa;
+            student_name = student.name;
+        }
+    }
+    std::cout << "Студент с наименьшим баллом: " << student_name << "\t балл = " << min_gpa << "\n";
+}
+
 int main() {
     std::vector<Student> database;
 
@@ -44,6 +57,7 @@ int main() {
         std::cout << "Меню:\n";
         std::cout << "1. Добавить студента\n";
         std::cout << "2. Вывести список студентов\n";
+        std::cout << "3. Вывести студента с наименьшим баллом\n";
         std::cout << "0. Выход\n";
         std::cout << "Выберите действие: ";
         std::cin >> choice;
