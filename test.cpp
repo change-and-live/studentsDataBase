@@ -51,3 +51,9 @@ TEST(StudentFunctionsTest, FindStudentSameGPA) {
     EXPECT_DOUBLE_EQ(min_result.gpa, 5.0);
     EXPECT_DOUBLE_EQ(max_result.gpa, 5.0);
 }
+
+int main(int argc, char **argv)
+{
+   ::testing::InitGoogleTest(&argc, argv);
+   return RUN_ALL_TESTS();
+}
