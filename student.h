@@ -11,11 +11,9 @@ struct Student {
     double gpa;
 };
 
-// Функции поиска
+// Объявления функций
 Student findStudentMinGPA(const std::vector<Student>& database);
 Student findStudentMaxGPA(const std::vector<Student>& database);
-
-// Функции для работы с консольным интерфейсом
 void addStudent(std::vector<Student>& database);
 void displayStudents(const std::vector<Student>& database);
 void displayStudentWithGPA(const std::vector<Student>& database, bool n);
