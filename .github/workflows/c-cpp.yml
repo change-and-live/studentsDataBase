@@ -2,20 +2,32 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive  # Важно для загрузки googletest
+
     - name: Install dependencies
-      run: sudo apt install -y googletest libgtest-dev build-essential
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake g++ make
+
+    - name: Configure CMake
+      run: |
+        cmake -B ${{github.workspace}}/build -S ${{github.workspace}}
+
     - name: Build
-      run: make
+      run: |
+        cmake --build ${{github.workspace}}/build --target all
+
     - name: Run tests
-      run: make test
-    - name: Run main program
-      run: ./program.out <<< "0"
+      run: |
+        ${{github.workspace}}/build/test_program
