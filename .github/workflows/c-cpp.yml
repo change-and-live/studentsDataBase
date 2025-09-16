@@ -9,44 +9,58 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v3
-
+    
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y lcov
-
-    - name: Build GTest (if needed)
+        sudo apt-get install -y libgtest-dev build-essential cmake lcov
+        
+    - name: Build Google Test
       run: |
-        cd /usr/src/gtest
-        sudo cmake CMakeLists.txt
-        sudo make
-        sudo cp lib/*.a /usr/lib
-
+        mkdir -p gtest_build
+        cd gtest_build
+        cmake /usr/src/gtest
+        make
+        sudo cp libgtest*.a /usr/lib
+        
     - name: Build project
       run: make
-
+      
     - name: Run tests
       run: make run_test
-
+      
     - name: Generate coverage report
       run: |
-        lcov --capture --directory . --output-file coverage.info --rc lcov_branch_coverage=1
-        lcov --remove coverage.info '/usr/*' '*/test.cpp' --output-file coverage.info
-
+        make coverage
+        # Извлекаем процент покрытия
+        COVERAGE=$(lcov --summary coverage.info | grep lines | awk '{print $2}' | cut -d'%' -f1)
+        echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+        
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v3
       with:
         file: ./coverage.info
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
-
-    - name: Archive coverage report
-      uses: actions/upload-artifact@v4
+        
+    - name: Create coverage badge
+      run: |
+        # Создаем SVG бейдж с процентом покрытия
+        curl -s "https://img.shields.io/badge/Test%20Coverage-${{ env.COVERAGE }}%25-$( [ ${{ env.COVERAGE }} -ge 80 ] && echo green || echo orange )" > coverage.svg
+        
+    - name: Upload coverage badge
+      uses: actions/upload-artifact@v3
       with:
-        name: coverage-report
-        path: coverage.info
+        name: coverage-badge
+        path: coverage.svg
+        
+    - name: Commit coverage badge
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add coverage.svg
+        git commit -m "Update coverage badge to ${{ env.COVERAGE }}%" || echo "No changes to commit"
+        git push
