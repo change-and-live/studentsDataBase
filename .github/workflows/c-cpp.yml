@@ -1,4 +1,4 @@
-name: C/C++ CI with Coverage
+name: C/C++ CI
 
 on:
   push:
@@ -7,24 +7,23 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
     
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgtest-dev build-essential cmake lcov
+        sudo apt-get install -y libgtest-dev cmake build-essential
         
-    - name: Build Google Test
+    - name: Build GTest
       run: |
-        mkdir -p gtest_build
-        cd gtest_build
-        cmake /usr/src/gtest
-        make
-        sudo cp libgtest*.a /usr/lib
+        cd /usr/src/gtest
+        sudo cmake CMakeLists.txt
+        sudo make
+        sudo cp lib/*.a /usr/lib
         
     - name: Build project
       run: make
@@ -32,35 +31,5 @@ jobs:
     - name: Run tests
       run: make run_test
       
-    - name: Generate coverage report
-      run: |
-        make coverage
-        # Извлекаем процент покрытия
-        COVERAGE=$(lcov --summary coverage.info | grep lines | awk '{print $2}' | cut -d'%' -f1)
-        echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
-        
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.info
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: unittests
-        
-    - name: Create coverage badge
-      run: |
-        # Создаем SVG бейдж с процентом покрытия
-        curl -s "https://img.shields.io/badge/Test%20Coverage-${{ env.COVERAGE }}%25-$( [ ${{ env.COVERAGE }} -ge 80 ] && echo green || echo orange )" > coverage.svg
-        
-    - name: Upload coverage badge
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-badge
-        path: coverage.svg
-        
-    - name: Commit coverage badge
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add coverage.svg
-        git commit -m "Update coverage badge to ${{ env.COVERAGE }}%" || echo "No changes to commit"
-        git push
+    - name: Run program
+      run: ./program.out <<< "0"
