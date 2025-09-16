@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <stdexpect>
+#include <stdexcept>
+#include "student.h"
 
 // Функция для добавления студента в базу данных
 void addStudent(std::vector<Student>& database) {
