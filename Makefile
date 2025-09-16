@@ -1,11 +1,5 @@
-# Основная цель по умолчанию - компиляция программы
 all:
-	g++ -std=c++20 main.cpp -lgtest -lgtest_main -pthread -o program.out
+  g++ -std=c++17 -pthread -I/usr/include/gtest -L/usr/lib/x86_64-linux-gnu 1.cpp -o program.out -lgtest -lpthread
 
-# Цель для запуска тестов - сначала компилирует, потом запускает
-run_test: all
-	./program.out
-
-# Очистка - удаление скомпилированной программы
 clean:
-	rm -f program.out
+  rm program.out
