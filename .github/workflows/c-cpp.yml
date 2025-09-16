@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgtest-dev cmake
+        sudo apt-get install -y libgtest-dev cmake build-essential
         
     - name: Build GTest
       run: |
@@ -30,3 +30,6 @@ jobs:
       
     - name: Run tests
       run: make run_test
+      
+    - name: Run program
+      run: ./program.out <<< "0"
