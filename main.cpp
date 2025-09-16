@@ -1,13 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
-struct Student {
-    std::string name;
-    int age;
-    std::string major;
-    double gpa;
-};
+#include "student.h"
 
 // Функция для добавления студента в базу данных
 void addStudent(std::vector<Student>& database) {
@@ -40,38 +34,15 @@ void displayStudents(const std::vector<Student>& database) {
     }
 }
 
-// Функция для поиска студента с наименьшим баллом
-void findStudentsMinGPA(const std::vector<Student>& database) {
-    if (database.empty()){
-        std::cout << "База данных пуста";
-        return;
+void displayStudentWithGPA(const std::vector<Student>& database, bool n) {
+    if (!n) {
+        Student minStudent = findStudentMinGPA(database);
+        std::cout << "Студент с наименьшим баллом: " << minStudent.name << "\t балл = " << minStudent.gpa << "\n";
     }
-    double min_gpa = 100.0;
-    std::string student_name = "";
-    for (const Student& student : database) {
-        if (min_gpa > student.gpa) {
-            min_gpa = student.gpa;
-            student_name = student.name;
-        }
+    if (n) {
+        Student maxStudent = findStudentMaxGPA(database);
+        std::cout << "Студент с наибольшим баллом: " << maxStudent.name << "\t балл = " << maxStudent.gpa << "\n";
     }
-    std::cout << "Студент с наименьшим баллом: " << student_name << "\t балл = " << min_gpa << "\n";
-}
-
-// Функция для поиска студента с наибольшим баллом
-void findStudentsMaxGPA(const std::vector<Student>& database) {
-    if (database.empty()){
-        std::cout << "База данных пуста";
-        return;
-    }
-    double max_gpa = 0.0;
-    std::string student_name = "";
-    for (const Student& student : database) {
-        if (max_gpa < student.gpa) {
-            max_gpa = student.gpa;
-            student_name = student.name;
-        }
-    }
-    std::cout << "Студент с наибольшим баллом: " << student_name << "\t балл = " << max_gpa << "\n";
 }
 
 int main() {
@@ -96,10 +67,10 @@ int main() {
                 displayStudents(database);
                 break;
             case 3:
-                findStudentsMinGPA(database);
+                displayStudentWithGPA(database, 0);
                 break;
             case 4:
-                findStudentsMaxGPA(database);
+                displayStudentWithGPA(database, 1);
                 break;
             case 0:
                 std::cout << "Выход из программы.\n";
