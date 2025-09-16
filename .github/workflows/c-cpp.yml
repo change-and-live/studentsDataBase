@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: sudo apt install -y googletest libgtest-dev build-essential
+    - name: Build
+      run: make
+    - name: Run tests
+      run: make test
+    - name: Run main program
+      run: ./program.out <<< "0"
