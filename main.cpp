@@ -3,13 +3,6 @@
 #include <string>
 #include <stdexpect>
 
-struct Student {
-    std::string name;
-    int age;
-    std::string major;
-    double gpa;
-};
-
 // Функция для добавления студента в базу данных
 void addStudent(std::vector<Student>& database) {
     Student student;
