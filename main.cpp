@@ -3,7 +3,6 @@
 #include <string>
 #include "gtest/gtest.h"
 #include <sstream>
-#include <stdexcept>
 
 struct Student {
     std::string name;
@@ -168,7 +167,6 @@ void view() {
                 std::cout << "Неверный выбор. Попробуйте снова.\n";
         }
     } while (choice != 0);
-    return 0;
 }
 
 int main(int argc, char **argv) {
